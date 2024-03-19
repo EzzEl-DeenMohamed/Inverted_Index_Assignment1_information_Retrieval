@@ -78,8 +78,17 @@ public class Index5 {
                 String ln;
                 int flen = 0;
                 while ((ln = file.readLine()) != null) {
-                    /// -2- **** complete here ****
-                    ///**** hint   flen +=  ________________(ln, fid);
+                    String[] words = ln.split("\\W+");
+                    for (String word : words) {
+                        word = word.toLowerCase();
+                        if(!index.containsKey(word)){
+                            index.put(word, new DictEntry());
+                        }
+                        else{
+                            index.get(word).term_freq += 1;
+                            index.get(word).addPosting(fid);
+                        }
+                    }
                 }
                 sources.get(fid).length = flen;
 
