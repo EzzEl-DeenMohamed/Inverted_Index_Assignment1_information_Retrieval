@@ -166,27 +166,36 @@ public class Index5 {
 
     //----------------------------------------------------------------------------  
     Posting intersect(Posting pL1, Posting pL2) {
-///****  -1-   complete after each comment ****
-//   INTERSECT ( p1 , p2 )
-//          1  answer ←      {}
-        Posting answer = null;
-        Posting last = null;
-//      2 while p1  != NIL and p2  != NIL
-     
-//          3 do if docID ( p 1 ) = docID ( p2 )
- 
-//          4   then ADD ( answer, docID ( p1 ))
-                // answer.add(pL1.docId);
- 
-//          5       p1 ← next ( p1 )
-//          6       p2 ← next ( p2 )
- 
- //          7   else if docID ( p1 ) < docID ( p2 )
-            
-//          8        then p1 ← next ( p1 )
-//          9        else p2 ← next ( p2 )
- 
-//      10 return answer
+
+        Posting answer = null; // Head of the result list
+        Posting last = null;   // Pointer to the last node in the result list
+
+        // Traverse both lists until one of them reaches the end
+        while (pL1 != null && pL2 != null) {
+            // If both lists have the same docId, add it to the result list
+            if (pL1.docId == pL2.docId) {
+                // If answer is null, initialize it with the first common Posting
+                if (answer == null) {
+                    answer = new Posting(pL1.docId, pL1.dtf);
+                    last = answer;
+                } else {
+                    // Append the common Posting to the result list
+                    last.next = new Posting(pL1.docId, pL1.dtf);
+                    last = last.next;
+                }
+                // Move both pointers to the next elements
+                pL1 = pL1.next;
+                pL2 = pL2.next;
+            }
+            // If the docId of pL1 is less than pL2, advance pL1
+            else if (pL1.docId < pL2.docId) {
+                pL1 = pL1.next;
+            }
+            // If the docId of pL2 is less than pL1, advance pL2
+            else {
+                pL2 = pL2.next;
+            }
+        }
         return answer;
     }
 
