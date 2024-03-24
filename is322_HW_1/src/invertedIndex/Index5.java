@@ -244,7 +244,7 @@ public class Index5 {
 
     public void store(String storageName) {
         try {
-            String pathToStorage = "/home/ehab/tmp11/rl/"+storageName;
+            String pathToStorage = "D:\\Collage\\ThirdYear\\Semster 2\\Information Retrival\\Inverted_Index_Assignment1_information_Retrieval\\tmp11\\rl\\"+storageName;
             Writer wr = new FileWriter(pathToStorage);
             for (Map.Entry<Integer, SourceRecord> entry : sources.entrySet()) {
                 System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().URL + ", Value = " + entry.getValue().title + ", Value = " + entry.getValue().text);
