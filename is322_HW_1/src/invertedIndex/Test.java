@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- *
+ * 
  * @author ehab
  */
 
@@ -46,7 +46,11 @@ public class Test {
             System.out.println("Print search phrase: ");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             phrase = in.readLine();
-/// -3- **** complete here ****
+            if (!phrase.isEmpty()) {
+                // Perform the search and display the results
+                System.out.println("Search results for \"" + phrase + "\":\n" + index.find_24_01(phrase));
+            }
+
         } while (!phrase.isEmpty());
 
     }
