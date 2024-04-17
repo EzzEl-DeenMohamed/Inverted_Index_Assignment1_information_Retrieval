@@ -83,35 +83,40 @@ public class Index5 {
     //-----------------------------------------------
 
     // Method to build the inverted index from files
-    public void buildIndex(String[] files) {  // from disk not from the internet
-        int fid = 0; // Initialize document ID counter
-        for (String fileName : files) { // Iterate through each file
-            try (BufferedReader file = new BufferedReader(new FileReader(fileName))) { // Open file for reading
-                if (!sources.containsKey(fileName)) { // Check if the file is not already indexed
-                    sources.put(fid, new SourceRecord(fid, fileName, fileName, "notext")); // Add the file to the sources map
+    public void buildIndex(String[] files) {
+        int fid = 0;
+        for (String fileName : files) {
+            try (BufferedReader file = new BufferedReader(new FileReader(fileName))) {
+                if (!sources.containsKey(fileName)) {
+                    sources.put(fid, new SourceRecord(fid, fileName, fileName, "notext"));
                 }
-                String ln; // String to store each line of the file
-                int flen = 0; // Initialize the length of the file
-                while ((ln = file.readLine()) != null) { // Read each line of the file
-                    String[] words = ln.split("\\W+"); // Split the line into words using non-word characters as delimiters
-                    for (String word : words) { // Iterate through each word
-                        word = word.toLowerCase(); // Convert word to lowercase
-                        if (!index.containsKey(word)) { // Check if the word is not already in the index
-                            index.put(word, new DictEntry()); // Add the word to the index with an empty entry
-                        } else { // If the word is already in the index
-                            index.get(word).term_freq += 1; // Increment term frequency
-                            index.get(word).addPosting(fid); // Add document ID to the posting list
+                String ln;
+                int flen = 0;
+                while ((ln = file.readLine()) != null) {
+                    String[] words = ln.split("\\W+");
+                    for (int i = 0; i < words.length; i++) {
+                        String word = words[i].toLowerCase();
+                        if (i < words.length - 1) {
+                            String biword = word + "_" + words[i+1].toLowerCase();
+                            if (!index.containsKey(biword)) {
+                                index.put(biword, new DictEntry());
+                            }
+                            index.get(biword).term_freq += 1;
+                            index.get(biword).addPosting(fid);
                         }
+                        if (!index.containsKey(word)) {
+                            index.put(word, new DictEntry());
+                        }
+                        index.get(word).term_freq += 1;
+                        index.get(word).addPosting(fid);
                     }
                 }
-                sources.get(fid).length = flen; // Set the length of the file in the source record
-
-            } catch (IOException e) { // Handle file not found exception
+                sources.get(fid).length = flen;
+            } catch (IOException e) {
                 System.out.println("File " + fileName + " not found. Skip it");
             }
-            fid++; // Increment document ID counter
+            fid++;
         }
-        //   printDictionary(); // Optionally print the resulting dictionary
     }
 
     //----------------------------------------------------------------------------
