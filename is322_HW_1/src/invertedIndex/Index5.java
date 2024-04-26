@@ -231,28 +231,29 @@ public class Index5 {
     //----------------------------------------------------------------------------
 
     // Method to perform a non-optimized search for a phrase
-    public String find_24_01(String phrase) {
-        String result = ""; // Initialize the result string
-        String[] words = phrase.split("\\W+"); // Split the phrase into individual words
-        int len = words.length; // Get the length of the word array
+    public String find_24_01(String phrase) { // any mumber of terms non-optimized search
 
-        // Retrieve the posting list for the first word
+        String result = "";
+        String[] words = phrase.split("\\W+");
+        int len = words.length;
+
+        if (len > 1){
+            return "Not supported yet";
+        }
+
+
+        //fix this if word is not in the hash table will crash...
         Posting posting = index.get(words[0].toLowerCase()).pList;
         int i = 1;
-        // Iterate through the remaining words
         while (i < len) {
-            // Intersect the current posting list with the posting list of the next word
             posting = intersect(posting, index.get(words[i].toLowerCase()).pList);
             i++;
         }
-        // Iterate through the resulting posting list
         while (posting != null) {
-            // Append document information to the result string
+            //System.out.println("\t" + sources.get(num));
             result += "\t" + posting.docId + " - " + sources.get(posting.docId).title + " - " + sources.get(posting.docId).length + "\n";
-            // Move to the next posting
             posting = posting.next;
         }
-        // Return the final result string
         return result;
     }
 
